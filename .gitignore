@@ -4,3 +4,4 @@ out
 .webpack
 .env
 .idea
+.tool-versions

@@ -1,23 +1,21 @@
-import { execSync } from 'node:child_process'
-import path from 'node:path'
+import { execSync } from "node:child_process";
+import path from "node:path";
 
-import { sleep } from 'tings'
+import { sleep } from "tings";
 
-import type { AppName } from '../../config/apps'
-import { apps } from '../../config/apps'
-import { retrievedInstalledApps, startedScanning } from '../state/actions'
-import { dispatch } from '../state/store'
+import type { AppName } from "../../config/apps";
+import { apps } from "../../config/apps";
+import { retrievedInstalledApps, startedScanning } from "../state/actions";
+import { dispatch } from "../state/store";
 
 function getAllInstalledAppNames(): string[] {
-  const appNames = execSync(
+  return execSync(
     'find ~/Applications /Applications -iname "*.app" -prune -not -path "*/.*" 2>/dev/null ||true',
   )
     .toString()
     .trim()
     .split('\n')
     .map((appPath) => path.parse(appPath).name)
-
-  return appNames
 }
 
 async function getInstalledAppNames(): Promise<void> {
@@ -25,8 +23,10 @@ async function getInstalledAppNames(): Promise<void> {
 
   const allInstalledAppNames = getAllInstalledAppNames()
 
-  const installedApps = Object.keys(apps).filter((appName) =>
-    allInstalledAppNames.includes(appName),
+  const installedApps = (Object.keys(apps) as Array<AppName>).filter((appName) => {
+      const link = ('link' in apps[appName]) ? (apps[appName] as any)['link'] as AppName : undefined
+      return allInstalledAppNames.includes(link ?? appName);
+    },
   ) as AppName[]
 
   // It appears that sometimes the installed app IDs are not fetched, maybe a
@@ -35,7 +35,7 @@ async function getInstalledAppNames(): Promise<void> {
   // https://github.com/will-stone/browserosaurus/issues/425
   if (installedApps.length === 0) {
     await sleep(500)
-    getInstalledAppNames()
+    await getInstalledAppNames()
   } else {
     dispatch(retrievedInstalledApps(installedApps))
   }

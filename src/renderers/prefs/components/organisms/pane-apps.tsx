@@ -32,6 +32,7 @@ import { Pane } from '../molecules/pane'
 type SortableItemProps = {
   readonly id: InstalledApp['name']
   readonly name: InstalledApp['name']
+  readonly link?: InstalledApp['link']
   readonly index: number
   readonly icon?: string
   readonly keyCode?: string
@@ -40,6 +41,7 @@ type SortableItemProps = {
 const SortableItem = ({
   id,
   name,
+  link,
   keyCode = '',
   index,
   icon = '',
@@ -84,7 +86,7 @@ const SortableItem = ({
           className={clsx('mr-4 h-8 w-8', !icon && 'hidden')}
           src={icon}
         />
-        <span>{name}</span>
+        <span>{link ? `${name} (${link})` : name}</span>
       </div>
       <div className="flex items-center justify-center p-4">
         <Input
@@ -162,14 +164,15 @@ export function AppsPane(): JSX.Element {
             items={installedApps}
             strategy={verticalListSortingStrategy}
           >
-            {installedApps.map(({ id, name, hotCode }, index) => (
+            {installedApps.map(({ id, name, link, hotCode }, index) => (
               <SortableItem
                 key={id}
-                icon={icons[id]}
+                icon={icons[link ?? id]}
                 id={id}
                 index={index}
                 keyCode={keyCodeMap[hotCode || '']}
                 name={name}
+                link={link}
               />
             ))}
           </SortableContext>

@@ -134,11 +134,11 @@ export const actionHubMiddleware =
 
     // Clicked app
     else if (clickedApp.match(action)) {
-      const { appName, isAlt, isShift } = action.payload
+      const { appName, link, isAlt, isShift } = action.payload
 
       // Ignore if app's bundle id is missing
       if (appName) {
-        openApp(appName, nextState.data.url, isAlt, isShift)
+        openApp(appName, link, nextState.data.url, isAlt, isShift)
         pickerWindow?.hide()
       }
     }
@@ -164,6 +164,7 @@ export const actionHubMiddleware =
         if (!action.payload.metaKey && foundApp) {
           openApp(
             foundApp.name,
+            foundApp.link,
             nextState.data.url,
             action.payload.altKey,
             action.payload.shiftKey,

@@ -5,6 +5,7 @@ const picker = actionNamespacer('picker')
 
 type OpenAppArguments = {
   appName: AppName | undefined
+  link?: AppName
   isAlt: boolean
   isShift: boolean
 }

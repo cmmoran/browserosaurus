@@ -4,7 +4,7 @@ import { apps } from './apps'
 test.each(getKeys(apps))(
   '%s should not include anything but allowed keys',
   (input) => {
-    const allowedKeys = new Set(['name', 'convertUrl', 'privateArg'])
+    const allowedKeys = new Set(['name', 'link', 'convertUrl', 'privateArg', 'profileArg'])
 
     const unknownKeys = getKeys(apps[input]).filter(
       (key) => !allowedKeys.has(key),

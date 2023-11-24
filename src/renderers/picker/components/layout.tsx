@@ -14,7 +14,6 @@ import { clickedApp, startedPicker } from '../state/actions'
 import AppLogo from './atoms/app-logo'
 import Kbd from './atoms/kbd'
 import { useKeyboardEvents } from './hooks/use-keyboard-events'
-import SupportMessage from './organisms/support-message'
 import UpdateBar from './organisms/update-bar'
 import UrlBar from './organisms/url-bar'
 
@@ -76,7 +75,7 @@ const App: React.FC = () => {
                     appsRef.current[index] = element
                   }
                 }}
-                aria-label={`${app.name} App`}
+                aria-label={app.link ? `${app.name} (${app.link}) App` : `${app.name} App`}
                 className={clsx(
                   'flex h-12 w-full shrink-0 items-center justify-between space-x-4 px-4 py-2 text-left',
                   'focus:bg-blue-500 focus:text-white focus:outline-none focus:dark:bg-blue-700',
@@ -87,6 +86,7 @@ const App: React.FC = () => {
                   dispatch(
                     clickedApp({
                       appName: app.name,
+                      link: app.link,
                       isAlt: event.altKey,
                       isShift: event.shiftKey,
                     }),
@@ -105,7 +105,7 @@ const App: React.FC = () => {
                 }}
                 type="button"
               >
-                <span>{app.name}</span>
+                <span>{app.link ? `${app.name} (${app.link})` : app.name}</span>
                 <span className="flex items-center space-x-4">
                   {app.hotCode ? (
                     <Kbd className="shrink-0">{keyCodeMap[app.hotCode]}</Kbd>
@@ -113,7 +113,7 @@ const App: React.FC = () => {
                   <AppLogo
                     app={app}
                     className="h-6 w-6 shrink-0"
-                    icon={icons[app.name]}
+                    icon={icons[app.link ?? app.name]}
                   />
                 </span>
               </button>
@@ -125,8 +125,6 @@ const App: React.FC = () => {
       <UrlBar />
 
       <UpdateBar />
-
-      <SupportMessage />
     </div>
   )
 }

@@ -1,19 +1,17 @@
 import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
 
-import { useIsSupportMessageHidden } from '../../../shared/state/hooks'
 import { clickedDonate, clickedMaybeLater } from '../../state/actions'
 
 const SupportMessage = (): JSX.Element => {
   const dispatch = useDispatch()
-  const isSupportMessageHidden = useIsSupportMessageHidden()
 
   return (
     <div
       className={clsx(
         'absolute inset-0 flex flex-col',
         'overflow-y-auto bg-slate-800 text-slate-400',
-        isSupportMessageHidden && 'hidden',
+        'hidden',
       )}
     >
       <div className="p-4">

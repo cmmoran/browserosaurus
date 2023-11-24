@@ -1,6 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import type { AppName } from '../../config/apps'
+import { apps } from '../../config/apps'
 import {
   changedPickerWindowBounds,
   readiedApp,
@@ -20,6 +21,7 @@ import {
 type Storage = {
   apps: {
     name: AppName
+    link?: AppName
     hotCode: string | null
     isInstalled: boolean
   }[]
@@ -61,10 +63,12 @@ const storage = createReducer<Storage>(defaultStorage, (builder) =>
         )
 
         if (!installedAppInStorage) {
+          const link = ('link' in apps[installedAppName] ? (apps[installedAppName] as any).link as AppName : undefined)
           state.apps.push({
             hotCode: null,
             isInstalled: true,
             name: installedAppName,
+            link: link,
           })
         }
       }

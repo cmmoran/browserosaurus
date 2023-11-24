@@ -1,5 +1,7 @@
 type App = {
+  link?: string
   privateArg?: string
+  profileArg?: string
   convertUrl?: (url: string) => string
 }
 
@@ -19,6 +21,21 @@ const apps = typeApps({
   },
   'Brave Dev': {
     privateArg: '--incognito',
+  },
+  'c@cm': {
+    link: 'Google Chrome',
+    privateArg: '--incognito',
+    profileArg: '--profile-directory=Default'
+  },
+  'cm@k': {
+    link: 'Google Chrome',
+    privateArg: '--incognito',
+    profileArg: '--profile-directory=Profile 6'
+  },
+  'c@sa': {
+    link: 'Google Chrome',
+    privateArg: '--incognito',
+    profileArg: '--profile-directory=Profile 5'
   },
   'Chromium': {
     privateArg: '--incognito',

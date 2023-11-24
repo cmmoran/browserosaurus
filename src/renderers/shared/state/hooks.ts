@@ -15,6 +15,7 @@ const useDeepEqualSelector: TypedUseSelectorHook<RootState> = (selector) =>
 
 type InstalledApp = {
   name: AppName
+  link?: AppName
   hotCode: string | null
 }
 
@@ -25,22 +26,8 @@ const useInstalledApps = (): InstalledApp[] => {
     .map((storedApp) => ({
       hotCode: storedApp.hotCode,
       name: storedApp.name,
+      link: storedApp.link
     }))
-}
-
-const useIsSupportMessageHidden = (): boolean => {
-  const supportMessageNumber = useSelector(
-    (state) => state.storage.supportMessage,
-  )
-
-  const ONE_WEEK = 604_800_000
-
-  return (
-    // Hidden by user
-    supportMessageNumber === -1 ||
-    // Snoozing
-    supportMessageNumber > Date.now() - ONE_WEEK
-  )
 }
 
 const useKeyCodeMap = (): Record<string, string> =>
@@ -50,7 +37,6 @@ export {
   InstalledApp,
   useDeepEqualSelector,
   useInstalledApps,
-  useIsSupportMessageHidden,
   useKeyCodeMap,
   useSelector,
   useShallowEqualSelector,

@@ -4,7 +4,7 @@ import { promisify } from 'node:util'
 
 import log from 'electron-log'
 
-import type { AppName } from '../../config/apps'
+import type { AppName, apps } from '../../config/apps'
 import type { Storage } from '../../shared/state/reducer.storage'
 import { gotAppIcons } from '../state/actions'
 import { dispatch } from '../state/store'
@@ -47,8 +47,8 @@ export async function getAppIcons(apps: Storage['apps']): Promise<void> {
 
     for await (const app of apps) {
       try {
-        const dataURI = await getIconDataURI(app.name, 64)
-        icons[app.name] = dataURI
+        const dataURI = await getIconDataURI(app.link ?? app.name, 64)
+        icons[app.link ?? app.name] = dataURI
       } catch (error: unknown) {
         log.warn(error)
       }
