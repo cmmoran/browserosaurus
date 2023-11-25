@@ -86,7 +86,7 @@ const SortableItem = ({
           className={clsx('mr-4 h-8 w-8', !icon && 'hidden')}
           src={icon}
         />
-        <span>{link ? `${name} (${link})` : name}</span>
+        <span>{link ? `${link} (${name})` : name}</span>
       </div>
       <div className="flex items-center justify-center p-4">
         <Input

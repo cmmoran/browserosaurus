@@ -2,7 +2,15 @@ type App = {
   link?: string
   privateArg?: string
   profileArg?: string
+  resolveProfiles?: boolean
   convertUrl?: (url: string) => string
+}
+
+type Profile = {
+  displayName: string
+  profileDirName: string
+  profileDirPath: string
+  profilePictureUrl?: string
 }
 
 const typeApps = <T extends Record<string, App>>(apps: T) => apps
@@ -21,21 +29,6 @@ const apps = typeApps({
   },
   'Brave Dev': {
     privateArg: '--incognito',
-  },
-  'c@cm': {
-    link: 'Google Chrome',
-    privateArg: '--incognito',
-    profileArg: '--profile-directory=Default'
-  },
-  'cm@k': {
-    link: 'Google Chrome',
-    privateArg: '--incognito',
-    profileArg: '--profile-directory=Profile 6'
-  },
-  'c@sa': {
-    link: 'Google Chrome',
-    privateArg: '--incognito',
-    profileArg: '--profile-directory=Profile 5'
   },
   'Chromium': {
     privateArg: '--incognito',
@@ -80,6 +73,7 @@ const apps = typeApps({
   'FreeTube': {},
   'Google Chrome': {
     privateArg: '--incognito',
+    resolveProfiles: true,
   },
   'Google Chrome Beta': {
     privateArg: '--incognito',
@@ -162,4 +156,4 @@ type Apps = typeof apps
 
 type AppName = keyof typeof apps
 
-export { AppName, Apps, apps }
+export { AppName, App, Apps, Profile, apps }
