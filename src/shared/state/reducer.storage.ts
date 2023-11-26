@@ -1,11 +1,11 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import type { AppName } from '../../config/apps'
-import { apps } from '../../config/apps'
 import {
   changedPickerWindowBounds,
   readiedApp,
   receivedRendererStartupSignal,
+  retrievedAppProfiles,
   retrievedInstalledApps,
 } from '../../main/state/actions'
 import {
@@ -54,7 +54,9 @@ const storage = createReducer<Storage>(defaultStorage, (builder) =>
       const installedAppNames = action.payload
 
       for (const storedApp of state.apps) {
-        storedApp.isInstalled = installedAppNames.includes(storedApp.name)
+        storedApp.isInstalled = installedAppNames.includes(
+          storedApp.link ?? storedApp.name,
+        )
       }
 
       for (const installedAppName of installedAppNames) {
@@ -63,17 +65,36 @@ const storage = createReducer<Storage>(defaultStorage, (builder) =>
         )
 
         if (!installedAppInStorage) {
-          const link = ('link' in apps[installedAppName] ? (apps[installedAppName] as any).link as AppName : undefined)
           state.apps.push({
             hotCode: null,
             isInstalled: true,
             name: installedAppName,
-            link: link,
           })
         }
       }
     })
+    .addCase(retrievedAppProfiles, (state, action) => {
+      const appProfiles = action.payload
+      const installedProfileNames = Object.entries(action.payload).map(
+        ([appName]) => appName,
+      )
 
+      for (const installedProfileName of installedProfileNames) {
+        const installedAppInStorage = state.apps.some(
+          ({ name }) => name === installedProfileName,
+        )
+        const link = appProfiles[installedProfileName].link
+
+        if (!installedAppInStorage) {
+          state.apps.unshift({
+            hotCode: null,
+            isInstalled: true,
+            link: link,
+            name: installedProfileName,
+          })
+        }
+      }
+    })
     .addCase(updatedHotCode, (state, action) => {
       const hotCode = action.payload.value
 

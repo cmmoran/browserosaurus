@@ -10,6 +10,7 @@ import {
   gotDefaultBrowserStatus,
   openedUrl,
   receivedRendererStartupSignal,
+  retrievedAppProfiles,
   retrievedInstalledApps,
   startedScanning,
 } from '../../main/state/actions'
@@ -66,6 +67,9 @@ const data = createReducer<Data>(defaultData, (builder) =>
     })
 
     .addCase(retrievedInstalledApps, (state) => {
+      state.scanStatus = 'scanning'
+    })
+    .addCase(retrievedAppProfiles, (state) => {
       state.scanStatus = 'scanned'
     })
 

@@ -2,6 +2,7 @@
 import {
   clickedRestorePicker,
   openedUrl,
+  retrievedAppProfiles,
   retrievedInstalledApps,
 } from '../../../main/state/actions'
 import type { Middleware } from '../../../shared/state/model'
@@ -26,6 +27,7 @@ export const pickerMiddleware =
     if (
       doesActionOpenPicker ||
       retrievedInstalledApps.match(action) ||
+      retrievedAppProfiles.match(action) ||
       clickedDonate.match(action) ||
       clickedMaybeLater.match(action)
     ) {

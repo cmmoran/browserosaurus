@@ -3,29 +3,37 @@ type App = {
   privateArg?: string
   profileArg?: string
   resolveProfiles?: boolean
-  convertUrl?: (url: string) => string
+  convertUrl?: {
+    search?: string | RegExp
+    replace: string
+  }
 }
 
 type Profile = {
   displayName: string
-  profileDirName: string
-  profileDirPath: string
-  profilePictureUrl?: string
+  name: string
+  directory: string
+  path: string
 }
-
 const typeApps = <T extends Record<string, App>>(apps: T) => apps
 
-const apps = typeApps({
+const apps: Record<string, App> = typeApps({
   'Arc': {},
   'Blisk': {},
   'Brave Browser': {
     privateArg: '--incognito',
+    profileArg: '--profile-directory={directory}',
+    resolveProfiles: true,
   },
   'Brave Browser Beta': {
     privateArg: '--incognito',
+    profileArg: '--profile-directory={directory}',
+    resolveProfiles: true,
   },
   'Brave Browser Nightly': {
     privateArg: '--incognito',
+    profileArg: '--profile-directory={directory}',
+    resolveProfiles: true,
   },
   'Brave Dev': {
     privateArg: '--incognito',
@@ -34,25 +42,22 @@ const apps = typeApps({
     privateArg: '--incognito',
   },
   'Discord': {
-    convertUrl: (url) =>
-      url.replace(
-        /^https?:\/\/(?:(?:ptb|canary)\.)?discord\.com\//u,
-        'discord://-/',
-      ),
+    convertUrl: {
+      search: /^https?:\/\/(?:(?:ptb|canary)\.)?discord\.com\//u,
+      replace: 'discord://-/',
+    },
   },
   'Discord Canary': {
-    convertUrl: (url) =>
-      url.replace(
-        /^https?:\/\/(?:(?:ptb|canary)\.)?discord\.com\//u,
-        'discord://-/',
-      ),
+    convertUrl: {
+      search: /^https?:\/\/(?:(?:ptb|canary)\.)?discord\.com\//u,
+      replace: 'discord://-/',
+    },
   },
   'Discord PTB': {
-    convertUrl: (url) =>
-      url.replace(
-        /^https?:\/\/(?:(?:ptb|canary)\.)?discord\.com\//u,
-        'discord://-/',
-      ),
+    convertUrl: {
+      search: /^https?:\/\/(?:(?:ptb|canary)\.)?discord\.com\//u,
+      replace: 'discord://-/',
+    },
   },
   'Dissenter': {},
   'DuckDuckGo': {},
@@ -62,6 +67,8 @@ const apps = typeApps({
   'Finicky': {},
   'Firefox': {
     privateArg: '--private-window',
+    profileArg: '-P "{name}"',
+    resolveProfiles: true,
   },
   'Firefox Developer Edition': {
     privateArg: '--private-window',
@@ -73,6 +80,7 @@ const apps = typeApps({
   'FreeTube': {},
   'Google Chrome': {
     privateArg: '--incognito',
+    profileArg: '--profile-directory={directory}',
     resolveProfiles: true,
   },
   'Google Chrome Beta': {
@@ -100,8 +108,10 @@ const apps = typeApps({
   'Microsoft Edge Canary': {},
   'Microsoft Edge Dev': {},
   'Microsoft Teams': {
-    convertUrl: (url) =>
-      url.replace('https://teams.microsoft.com/', 'msteams:/'),
+    convertUrl: {
+      search: 'https://teams.microsoft.com/',
+      replace: 'msteams:/',
+    },
   },
   'Min': {},
   'Miro': {},
@@ -121,7 +131,9 @@ const apps = typeApps({
   'Orion': {},
   'Orion RC': {},
   'Pocket': {
-    convertUrl: (url) => `pocket://add?url=${url}`,
+    convertUrl: {
+      replace: 'pocket://add?url={url}',
+    },
   },
   'Polypane': {},
   'qutebrowser': {},

@@ -44,8 +44,10 @@ import {
   openedUrl,
   readiedApp,
   receivedRendererStartupSignal,
+  retrievedAppProfiles,
   retrievedInstalledApps,
 } from './actions'
+import { getAppsWithProfiles } from '../utils/get-app-profiles'
 
 /**
  * Asynchronously update perma store on state.storage changes
@@ -218,6 +220,8 @@ export const actionHubMiddleware =
 
     // Get app icons
     else if (retrievedInstalledApps.match(action)) {
+      getAppsWithProfiles()
+    } else if (retrievedAppProfiles.match(action)) {
       getAppIcons(nextState.storage.apps)
     }
 

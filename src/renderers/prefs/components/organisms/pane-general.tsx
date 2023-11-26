@@ -48,6 +48,11 @@ export const GeneralPane = (): JSX.Element => {
     (state) => state.storage.apps.filter((app) => app.isInstalled).length,
   )
 
+  const numberOfLinkedApps = useSelector(
+    (state) =>
+      state.storage.apps.filter((app) => app.link !== undefined).length,
+  )
+
   return (
     <Pane className="space-y-8" pane="general">
       <Row>
@@ -76,8 +81,9 @@ export const GeneralPane = (): JSX.Element => {
         <Right>
           <Button onClick={() => dispatch(clickedRescanApps())}>Rescan</Button>
           <p className="mt-2 text-sm opacity-70">
-            {numberOfInstalledApps} compatible apps found. Rescan if you have
-            added or removed a compatible app whilst Browserosaurus is running.
+            {numberOfInstalledApps} compatible apps with {numberOfLinkedApps}{' '}
+            links found. Rescan if you have added or removed a compatible app
+            whilst Browserosaurus is running.
           </p>
         </Right>
       </Row>
